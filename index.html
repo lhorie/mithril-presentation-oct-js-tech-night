@@ -1,0 +1,286 @@
+﻿<!doctype html>
+<html>
+<head>
+<title>Mithril.js</title>
+<link rel="stylesheet" href="reveal.min.css" />
+<link rel="stylesheet" href="theme.css" />
+<link rel="stylesheet" href="code-theme.css" />
+<script src="reveal.min.js"></script>
+<script src="prism.min.js"></script>
+<script src="mithril.min.js"></script>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+
+
+<section>
+	<h3>Leo Horie</h3>
+	<p>Developer at Klick Health</p>
+</section>
+<section>
+	<h1>Mithril.js</h1>
+</section>
+<section>
+	<h3>Design Goals</h3>
+	<ul>
+		<li>Small</li>
+		<li>Fast</li>
+		<li>Pragmatic</li>
+	</ul>
+</section>
+<section>
+	<h3>Simplicity through isomorphisms</h3>
+	<p>Two things are isomorphic if they share<br >a set of properties that interest us</p>
+</section>
+<section>
+	<h3>Pick features that are</h3>
+	<h3>isomorphic to familiar things,</h3>
+	<h3>but more powerful</h3>
+</section>
+<section>
+	<h3>Getter-Setters</h3>
+	<h4>Same as variables, but functional</h4>
+	<div style="float:left;width:50%">
+		<pre><code class="language-javascript">
+//a variable
+var thing = "Macbook";
+thing = "iPhone";
+console.log( things ); // "iPhone"
+		</code></pre>
+	</div>
+	<div style="float:left;width:50%">
+		<pre><code class="language-javascript">
+//a getter-setter
+var thing = m.prop( "MacBook" );
+thing( "iPhone" );
+console.log( thing() ); // "iPhone"
+		</code></pre>
+	</div>
+	<div style="clear:both;"></div>
+</section>
+<section>
+	<h3>Promises</h3>
+	<p>Makes Async similar to Sync</p>
+	<pre><code class="language-javascript">
+var things = m.request({method: "GET", url: "/things.json"}) //get a list of things
+  .then(function(list) { return list.slice(0, 10) });        //then slice it
+  .then(function(list) { return list.slice(0, 3) });         //then slice it some more
+	</code></pre>
+	<p>e.g. Compare to jQuery</p>
+	<pre><code class="language-javascript">
+var things = $(".things") //get a list of things
+  .slice(0, 10);          //then slice it
+  .slice(0, 3);           //then slice it some more
+	</code></pre>
+</section>
+<section>
+	<h3>Virtual DOM</h3>
+	<p>Just like HTML, but in Javascript</p>
+	<pre><code class="language-javascript">
+m("div", [                                     // &lt;div&gt;
+  m("a", {href: "http://google.ca"}, "Google") //   &lt;a href="http://google.ca"&gt;Google&lt;/a&gt;
+])                                             // &lt;/div&gt;
+	</code></pre>
+</section>
+<section>
+	<h5>Why not just use HTML?</h5>
+	<br>
+	<h3>Templating = Html + <em>Logic*</em></h5>
+	<br />
+	<h5>*Logic is complex!</h5>
+</section>
+<section>
+	<h3>Case study: Angular.js</h3>
+	<h5>Loop-related things...</h5>
+	<ul>
+		<li>ng-repeat</li>
+		<li>track by</li>
+		<li>ng-repeat-start/ng-repeat-end</li>
+		<li>ng-options and list comprehension syntax</li>
+		<li>ng-init</li>
+		<li>filters</li>
+		<li>$index</li>
+		<li>$scope semantics</li>
+		<li>error handling semantics</li>
+	</ul>
+</section>
+<section>
+	<h3>Case study: jQuery</h3>
+	<h5>Loops: Need a lot of boilerplate code</h5>
+	<ul>
+		<li>render whole list</li>
+		<li>update one item</li>
+		<li>add item</li>
+		<li>remove item</li>
+		<li>map data to element</li>
+		<li>find element by data / find data by element (to update / remove)</li>
+		<li>diff</li>
+		<li>batch redraws</li>
+	</ul>
+</section>
+<section>
+	<h5>HTML is easier to map onto javascript than the other way around</h5>
+	<pre><code class="language-javascript">
+m("div", [                                               //&lt;div&gt;
+  [1,2,3].map(function(num) {                            //  &lt;a href="/page/1"&gt;Page 1&lt;/a&gt;
+    return m("a", {href: "/page/" + num}, "Page " + num) //  &lt;a href="/page/2"&gt;Page 2&lt;/a&gt;
+  })                                                     //  &lt;a href="/page/3"&gt;Page 3&lt;/a&gt;
+])                                                       //&lt;/div&gt;
+	</code></pre>
+	<p>Let the browser and the framework do the heavy lifting</p>
+</section>
+<section>
+	<h3>Leverage the ecosystem</h3>
+	<div style="float:left;width:33%">
+		<pre><code class="language-javascript">
+// Vanilla Javascript
+m("ul.things", [
+  m("li", "iPhone"),
+  m("li", "Macbook"),
+])
+		</code></pre>
+	</div>
+	<div style="float:left;width:33%">
+		<pre><code class="language-javascript">
+# Coffescript
+m "ul.things",
+  m "li", "iPhone"
+  m "li", "Macbook"
+	
+		</code></pre>
+	</div>
+	<div style="float:left;width:33%">
+		<pre><code class="language-markup">
+// React's JSX (via MSX)
+&lt;ul class="things"&gt;
+  &lt;li&gt;iPhone&lt;/li&gt;
+  &lt;li&gt;Macbook&lt;/li&gt;
+&lt;/ul&gt;
+		</code></pre>
+	</div>
+	<div style="clear:both;"></div>
+</section>
+<section>
+	<ul>
+		<li>jshint templates</li>
+		<li>minify templates (source maps!)</li>
+		<li>Sweet.js macros</li>
+		<li>Static typing (Typescript)</li>
+		<li>render on the server</li>
+		<li>etc</li>
+	</ul>
+</section>
+<section>
+	<h3>Portable knowledge</h3>
+	<ul>
+		<li>Promises</li>
+		<li><code>.map</code>, <code>.filter</code>, and other FP concepts</li>
+		<li>CSS syntax (Emmett/ZenCoding)</li>
+		<li>Refactoring techniques</li>
+		<li>etc</li>
+	</ul>
+</section>
+<section>
+	<h4>Demo: fetching data</h4>
+	<pre><code class="language-javascript">
+var demo = {};
+
+demo.controller = function() {
+
+  this.things = m.request({method: "GET", url: "/things.json"});
+
+};
+	</code></pre>
+</section>
+<section>
+	<h4>Demo: showing stuff on screen</h4>
+	<pre><code class="language-javascript">var demo = {};
+
+demo.controller = function() {
+
+  this.things = m.request({method: "GET", url: "/things.json"});
+
+};
+
+demo.view = function(ctrl) {
+  return m("ul", [                      // &lt;ul&gt;
+
+    ctrl.things().map(function(thing) { //    &lt;li&gt;iPhone&lt;/li&gt;
+      return m("li", thing.name)        //    &lt;li&gt;MacBook&lt;/li&gt;
+    })                                  //    &lt;li&gt;iPod&lt;/li&gt;
+
+  ])                                    // &lt;/ul&gt;
+}
+
+m.module(document.body, demo) // initialize</code></pre>
+</section>
+<section>
+	<h4>Demo: responding to user actions</h4>
+	<pre><code class="language-javascript">var demo = {};
+
+demo.controller = function() {
+
+  this.things = m.request({method: "GET", url: "/things.json"});
+
+};
+
+demo.view = function(ctrl) {
+  return m("ul", [
+
+    ctrl.things().map(function(thing) {
+      return m("li", {onclick: function() { thing.name += "!" }}, thing.name)
+    })
+	
+  ])
+}
+
+m.module(document.body, demo) // initialize</code></pre>
+</section>
+<section>
+	<h4>Demo: result</h4>
+	<div id="demo" style="background:#3f3f3f;padding:30px;"></div>
+	<script>
+var demo = {};
+
+demo.controller = function() {
+  this.things = m.prop([{name: "iPhone"}, {name: "Macbook"}, {name: "iPad"}]);
+};
+
+demo.view = function(ctrl) {
+  return m("ul", [
+    ctrl.things().map(function(thing) {
+      return m("li", {onclick: function(e) { thing.name += "!" }}, thing.name)
+    })
+  ])
+}
+
+m.module(document.getElementById("demo"), demo)
+	</script>
+</section>
+<section>
+	<h3>Take away</h3>
+	<ul>
+		<li>Reads like server-side MVC code</li>
+		<li>You already know how to do conditionals, includes, etc</li>
+		<li>Mithril takes care of plumbing, performance</li>
+	</ul>
+</section>
+<section>
+	<ul>
+		<li>Learn Javascript, not frameworks</li>
+		<li>Practice FP, become a better programmer</li>
+	</ul>
+</section>
+<section>
+	<h3>Questions?</h3>
+</section>
+
+
+
+</div>
+</div>
+<script>Reveal.initialize()</script>
+</body>
+</html>
